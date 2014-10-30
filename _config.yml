@@ -3,8 +3,8 @@ permalink:        pretty
 relative_permalinks: true
 
 # Setup
-title:            Poole
-tagline:          The Jekyll Butler
+title:            Hsu Han's Software Engineering Blog
+tagline:          If it ain't broke, don't fix it.
 url:              http://blog.hsuhanooi.com
 paginate:         1
 baseurl:          /
