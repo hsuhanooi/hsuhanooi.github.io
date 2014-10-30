@@ -17,3 +17,5 @@ author:
 version:          1.0.0
 github:
   repo:           https://github.com/hsuhanooi/hsuhanooi
+markdown:         redcarpet
+highlighter:      pygments
