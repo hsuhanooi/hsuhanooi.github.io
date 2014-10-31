@@ -4,7 +4,7 @@ relative_permalinks: true
 
 # Setup
 title:            Hsu Han's Software Engineering Blog
-tagline:          If it ain't broke, don't fix it.
+tagline:          
 url:              http://blog.hsuhanooi.com
 paginate:         1
 baseurl:          /
