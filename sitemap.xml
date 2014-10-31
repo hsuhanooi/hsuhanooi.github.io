@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
   <url>
     <loc>http://blog.hsuhanooi.com/</loc> 
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>http://blog.hsuhanooi.com/2014/10/29/rsyslog/</loc>
+    <changefreq>never</changefreq>
+    <lastmod>2014-10-29</lastmod>
   </url>
 </urlset>
