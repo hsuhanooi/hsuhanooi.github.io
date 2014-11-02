@@ -82,6 +82,9 @@ a {
   padding-bottom: 4em;
   margin-bottom: 6em;
 }
+.post img {
+  max-width: 600px;
+}
 .post p {
   margin: 1em 0;
 }
