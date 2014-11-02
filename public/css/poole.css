@@ -21,7 +21,7 @@ h1 {
   font-weight: bold;
   line-height: 1.2;
   letter-spacing: -.03em;
-  margin: 0 0 40px;
+  margin: 0 0 1em;
 }
 h1 a {
   color: #3a3a3a;
@@ -60,14 +60,25 @@ a {
 .posts {
   margin-bottom: 10em;
 }
-.post-date {
-  font-weight: 200;
+.post:last-child {
+  border-bottom: 0;
 }
 .post {
   -webkit-font-smoothing: antialiased;
+  border-bottom: 1px solid #efefef;
+  padding-bottom: 4em;
+  margin-bottom: 6em;
 }
 .post p {
   margin: 1em 0;
+}
+.post blockquote {
+  margin-left: 0;  
+  padding-left: 1em;
+  border-left: 0.5em solid #efefef;
+}
+.post .post-date {
+  font-weight: 200;
 }
 .post .highlight {
   background-color: #f9f9f9; 
@@ -79,6 +90,10 @@ a {
   white-space: pre-wrap;
   word-break: break-all;
   word-wrap: break-word;
+}
+.post .comments-link {
+  display: block;
+  margin-top: 2em;
 }
 #comments {
   margin-top: 5em; 
