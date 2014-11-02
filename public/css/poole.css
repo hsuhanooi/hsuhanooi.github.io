@@ -37,16 +37,29 @@ a {
 .masthead {
   border-bottom: 1px solid #efefef;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 1em 0 1.25em;
+  padding: 1em 0;
   margin-bottom: 5em;
+  overflow: hidden;
+}
+.masthead a {
+  border: 0;
+  text-decoration: none;
+}
+.masthead-logo {
+  float: left;
+  width: 54px;
+  margin-right: 0.75em;
+}
+.masthead-content {
+  float: left;
+  padding-top: 2px;
 }
 .masthead-title {
   text-decoration: none;
   color: #474747;
-  font-size: 19px;
   font-weight: bold;
   display: block;
-  line-height: 1.25em;
+  line-height: 1em;
   margin: 0;
 }
 .masthead-description {
