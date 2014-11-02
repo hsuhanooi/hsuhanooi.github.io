@@ -8,7 +8,6 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: #F9F9F9;
 }
 html {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -36,11 +35,10 @@ a {
   color: #2c9ab7;
 }
 .masthead {
-  background-color: #fff;
-  box-shadow: 0 0 2px rgba(6,8,8,0.15);
+  border-bottom: 1px solid #efefef;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  height: 81px;
-  margin-bottom: 81px;
+  padding: 1em 0 1.25em;
+  margin-bottom: 5em;
 }
 .masthead-title {
   text-decoration: none;
@@ -48,6 +46,7 @@ a {
   font-size: 19px;
   font-weight: bold;
   display: block;
+  line-height: 1.25em;
   margin: 0;
 }
 .masthead-description {
@@ -57,6 +56,9 @@ a {
   margin: 0 auto;
   padding: 0 18px;
   width: 636px;
+}
+.posts {
+  margin-bottom: 10em;
 }
 .post-date {
   font-weight: 200;
@@ -68,11 +70,9 @@ a {
   margin: 1em 0;
 }
 .post .highlight {
-  background-color: #efefef; 
-  padding: 13px 27px 14px;
-  width: 654px;
-  position: relative;
-  right: 27px;
+  background-color: #f9f9f9; 
+  padding: 0 27px;
+  width: 600px;
 }
 .post .highlight pre {
   display: inline-block;
