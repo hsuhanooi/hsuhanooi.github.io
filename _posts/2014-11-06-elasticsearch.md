@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 11 Tips to Optimize Elasticsearch
+excerpt: I've been using Elasticsearch for a few months now and I was surprised at how little documentation there was about how to improve Elasticsearch performance. Here are 11 tips.
 ---
 
 First let me say that using Elasticsearch has been amazing. It was really easy to set up and get rolling and the fact that it's just Lucene underneath is a huge plus for me since I've done some work with it in the past.

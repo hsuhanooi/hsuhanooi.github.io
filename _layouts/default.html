@@ -4,18 +4,27 @@
   {% include head.html %}
 
   <body>
-
-    <header class="masthead">
-      <div class="container">
-        <a href="{{ site.baseurl }}"><img class="masthead-logo" src="/public/keyboard_x5F_wireless_2_.png"></a>
-        <div class="masthead-content">
-          <a href="{{ site.baseurl }}" title="Home" class="masthead-title">{{ site.title }}</a>
-          <span class="masthead-description">{{ site.tagline }}</span>
-        </div>
+    <header>
+      <div id="header" class="content">
+        <a id="picture-me" href="{{ site.baseurl }}"><img src="/public/hsuhan.png" width="45"></a>
+        <h2>{{ site.title }}</h2>
+        <p>{{ site.tagline }}</p>
       </div>
     </header>
-
-    <div class="container">
+    <nav class="content">
+      <ul>
+        {% for link in site.navigation %}
+          {% assign current = nil %}
+          {% if page.url contains link.url %}
+            {% assign current = 'current' %}
+          {% endif %}
+          <li class="element {% if forloop.first %}first{% endif %} {{ current }} {% if forloop.last %}last{% endif %}">
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    <div class="content">
       <main>
         {{ content }}
       </main>
@@ -27,5 +36,6 @@
     </div>
 
     {% include google_analytics.html %}
+
   </body>
 </html>
