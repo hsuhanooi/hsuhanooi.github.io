@@ -12,13 +12,13 @@ However I've been using Elasticsearch for a few months now and I was surprised a
 Make sure the Elasticsearch jvm isn't swapping out of memory. You'll see this tip everywhere and it's true. You can run elasticsearch with the mlockall field turned on which will ensure the JVM isn't swapping. You can also disable swap on the machine with sudo swapoff -a but this will only turn it off now but not including restarts. To disable swap on restart make sure you remove the swap keyword from /etc/fstab.
 
 ## 2. Set the `cutoff_frequency`
-Make sure you set the `cutoff_frequency` parameter on queries with common terms otherwise you get really slow queries for queries with a common term. I was indexing titles which had lots of common words like "the, and, this, 2" so Elasticsearch was returning 100K or more results per query. Scoring that many results really slowed it down and pegged the CPU. Setting the cutoff_frequency to 0.001 cut my 90th percentile in half.  <http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-match-query.html>
+Make sure you set the `cutoff_frequency` parameter on queries with common terms otherwise you get really slow queries for queries with a common term. I was indexing titles which had lots of common words like "the, and, this, 2" so Elasticsearch was returning 100K or more results per query. Scoring that many results really slowed it down and pegged the CPU. Setting the `cutoff_frequency` to 0.001 cut my 90th percentile in half.  <http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-match-query.html>
 
 ## 3. Use bool filters
 Make sure you use bool filters instead of and/or filters so elasticsearch can cache the filter fields using bitsets. <http://www.elasticsearch.org/blog/all-about-elasticsearch-filter-bitsets/>.
 
 ## 4. Turn on caching explicitly for bool filters
-Caching has to be turned on explicitly for bool filters. See bottom of <http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-bool-filter.html>. In the query itself in the bool filter set _cache to true.
+Caching has to be turned on explicitly for bool filters. See bottom of <http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-bool-filter.html>. In the query itself in the bool filter `set_cache` to true.
 
 ## 5. Stripe your data across multiple drives
 If you have multiple drives it's really easy to stripe your data across multiple drives and Elasticsearch will write to the disk with the most space left.
