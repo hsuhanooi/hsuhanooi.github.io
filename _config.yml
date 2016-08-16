@@ -16,7 +16,7 @@ author:
 version:          1.0.0
 github:
   repo:           https://github.com/hsuhanooi/hsuhanooi
-highlighter:      pygments
+highlighter:      rouge
 navigation:
   - title: Writing 
     url: /
