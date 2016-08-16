@@ -2,8 +2,8 @@
 permalink:        pretty
 
 # Setup
-title:            Hsu Han's Software Engineering Blog
-tagline:          
+title:            Hsu Han Ooi
+tagline:          Mobile Suit Gundam Pilot
 url:              http://blog.hsuhanooi.com
 paginate:         1
 baseurl:          /
@@ -18,3 +18,9 @@ github:
   repo:           https://github.com/hsuhanooi/hsuhanooi
 markdown:         redcarpet
 highlighter:      pygments
+navigation:
+  - title: Writing 
+    url: /
+  - title: About 
+    url: /about/
+
