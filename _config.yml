@@ -3,7 +3,7 @@ permalink:        pretty
 
 # Setup
 title:            Hsu Han Ooi
-tagline:          Mobile Suit Gundam Pilot
+tagline:          Entrepreneur, Programmer, Mobile Suit Gundam Pilot
 url:              http://blog.hsuhanooi.com
 paginate:         1
 baseurl:          /
@@ -18,8 +18,12 @@ github:
   repo:           https://github.com/hsuhanooi/hsuhanooi
 highlighter:      rouge
 navigation:
-  - title: Writing 
+  - title: Writing
     url: /
-  - title: About 
+  - title: About
     url: /about/
+  - title: LinkedIn
+    url: https://www.linkedin.com/in/hsuhanooi
+  - title: Twitter
+    url: https://twitter.com/hsuhanooi
 
