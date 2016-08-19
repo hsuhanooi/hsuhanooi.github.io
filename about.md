@@ -3,28 +3,26 @@ layout: default
 title: About
 ---
 
-<p class="message">
-  Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
-</p>
+## About
 
-In the novel, *The Strange Case of Dr. Jekyll and Mr. Hyde*, Mr. Poole is Dr. Jekyll's virtuous and loyal butler. Similarly, Poole is an upstanding and effective butler that helps you build Jekyll themes. It's made by [@mdo](https://twitter.com/mdo).
+My name is Hsu Han Ooi and I'm a web developer and tech-entrepreneur. I've lived in Seattle since 2007 and graduated from UW with a BS in Computer Science. Since then I've worked at various startups throughout the Seattle area and continue to be excited by the burgeoning Seattle technology community.
 
-There are currently two themes built on Poole:
+## Current Projects
 
-* [Hyde](http://hyde.getpoole.com)
-* [Lanyon](http://lanyon.getpoole.com)
+I currently hack away at [Madrona Venture Labs](http://madronavl.com/) a ([startup studio](https://en.wikipedia.org/wiki/Startup_studio)) in Seattle, WA.
 
-Learn more and contribute on [GitHub](https://github.com/poole).
+## Past Projects
 
-## Setup
+* I began my startup journey in 2006 at Evo in Fremont working on order fulfillment.
+* In 2007 I joined a small Seattle startup called Zillow.com.
+* 2008 I ventured out with my brother and two other brothers to found Eggsprout.
+* Eggsprout raised its first round and was renamed to Decide.
+* In 2013 Decide was acquired by eBay.
+* I worked at eBay for 2 years on the Seller Insights team trying to predict final sale prices for sellers.
+* 2016 I left eBay to create startups at Madrona Venture Labs.
 
-Some fun facts about the setup of this project include:
+You can see a more comprehensive list of stuff I've worked on in the past on [my LinkedIn](https://www.linkedin.com/in/hsuhanooi).
 
-* Built for [Jekyll](http://jekyllrb.com)
-* Developed on GitHub and hosted for free on [GitHub Pages](https://pages.github.com)
-* Coded with [Sublime Text 2](http://sublimetext.com), an amazing code editor
-* Designed and developed while listening to music like [Blood Bros Trilogy](https://soundcloud.com/maddecent/sets/blood-bros-series)
-
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/poole/poole/issues/new) or [ask me on Twitter](https://twitter.com/mdo).
+Feel free to [contact me on Twitter](https://twitter.com/hsuhanooi).
 
 Thanks for reading!
