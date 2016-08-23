@@ -26,4 +26,5 @@ navigation:
     url: https://www.linkedin.com/in/hsuhanooi
   - title: Twitter
     url: https://twitter.com/hsuhanooi
-
+gems:
+  - jekyll-sitemap

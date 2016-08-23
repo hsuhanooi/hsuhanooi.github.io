@@ -3,8 +3,6 @@ layout: default
 title: About
 ---
 
-## About
-
 My name is Hsu Han Ooi and I'm a web developer and tech-entrepreneur. I've lived in Seattle since 2007 and graduated from UW with a BS in Computer Science. Since then I've worked at various startups throughout the Seattle area and continue to be excited by the burgeoning Seattle technology community.
 
 ## Current Projects
