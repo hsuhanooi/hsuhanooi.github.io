@@ -1,5 +1,5 @@
 ---
-layout: post 
+layout: post
 title: Top 5 Millenial Tips for Retirement
 excerpt: While working on our latest idea at Madrona Venture Labs, I had the opportunity to dive deep into the financial technology space and one problem I found really interesting was the amount of millennials who hadn’t started or even thought of starting to plan for retirement.
 ---
