@@ -15,6 +15,7 @@
       <ul>
         {% for link in site.navigation %}
           {% assign current = nil %}
+          {{ page.is_post }}
           {% if page.url == link.url or (link.title == 'Writing' and (page.is_post or page.title == 'Archive')) %}
             {% assign current = 'current' %}
           {% endif %}
