@@ -3,10 +3,10 @@ layout: default
 title: About
 ---
 
-My name is Hsu Han Ooi and I've worked within the Seattle tech community for over 15 years. I'm a developer, entrepreneur, and investor. I've lived in Seattle since 2003 and graduated from UW with a BS in Computer Science. Since then I've worked at various startups throughout the Seattle area and continue to be excited by the burgeoning Seattle technology community.
+My name is Hsu Han Ooi and I've worked within the Seattle tech community for over 15 years. I'm a husband, developer, entrepreneur, dog dad, and investor. I've lived in Seattle since 2003 and graduated from UW with a BS in Computer Science. Since then I've worked at various startups throughout the Seattle area and continue to be excited by the burgeoning Seattle tech community. Outside of tech, in 2017 I got married to the love of my life and in 2018 we adopted the sweetest Chow-Chow [Gojira](https://www.instagram.com/gojiraonadventures/?hl=en).  
 
 ## Current Projects
-
+* Back on the hunt! Researching new opportunities around the crypto space (DeFi) and AI to start another company.
 
 ## Past Projects
 
@@ -19,10 +19,7 @@ My name is Hsu Han Ooi and I've worked within the Seattle tech community for ove
 * In 2017 I joined the [Paul Allen Institute for Artificial Intelligence](https://allenai.org/index.html), primarily working on [Semantic Scholar](https://www.semanticscholar.org).
 * 2018 - My friends and I started a small angel fund [Iterative Capital](https://iterative.vc) focused on helping give back to founders.
 * 2019 I started as the 2nd hire at Mutiny HQ (YC Summer 2018). Helping personalize web pages on the fly.
-* Got the itch to start my own company again. Probably something in Crypto (DeFi), or AI. 
 
 You can see a more comprehensive list of stuff I've worked on in the past on [my LinkedIn](https://www.linkedin.com/in/hsuhanooi).
 
-Feel free to [contact me on Twitter](https://twitter.com/hsuhanooi).
-
-Thanks for reading!
+If you made it this far feel free to [contact me on Twitter](https://twitter.com/hsuhanooi) or [my LinkedIn](https://www.linkedin.com/in/hsuhanooi) or [for Iterative VC inquiries](https://iterative.vc?ref=hsuhan_blog)
