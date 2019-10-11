@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Back to Blogging and New Opportunities
+title: Back to Blogging
 excerpt: These last 3 years have been a whirlwind for my career and it's funny to think I'm back where I started.
 ---
 
