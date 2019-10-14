@@ -7,7 +7,13 @@ tags: lightgbm
 
 There isn't a ton of documentation on LightGBM and the first post I ran into was [What is LightGBM, How to implement it? How to fine tune the parameters?](https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc). 
 
-The post did a great job talking about the parameters but the example written needed updating. In particular, running the example didn't give me the provided results and the code given doesn't actually run. If you just want the changes in the code to make it work it's below. Otherwise the changes I made are listed.
+The post did a great job talking about the parameters but the example written needed updating. In particular, running the example didn't give me the provided results and the code given doesn't actually run. If you just want the changes in the code to make it work it's below. Otherwise the changes I made are listed. Also I've included an alternate way to install on Mac if you choose not to use conda.
+
+```
+# libomp is necessary for lightgbm and you'll still get warnings but it will work.
+brew install libomp
+pip install lightgbm
+```
 
 ### 1. Update min_data param to 7 instead of 50. There's 225 records in x_train. 50 means stop splitting if you get to a leaf with 50 or less records, which will give you a very shallow tree. I thought 7 seemed more reasonable to get reasonably deep trees.
 
