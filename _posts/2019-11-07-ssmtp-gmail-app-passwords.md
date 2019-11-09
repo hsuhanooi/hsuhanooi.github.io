@@ -2,6 +2,7 @@
 layout: post
 title: Simple Scripting Getting ssmtp on UNIX with gmail Working
 excerpt: I use cron, ssmtp, bash, and curl for a lot of simple 30 min projects.
+tags: sounders,seatgeek,cron,ssmtp,curl,bash,scripting
 ---
 
 **MLS Cup Final**
@@ -186,7 +187,7 @@ I let this run during work and got some interesting interesting data. Columns ar
 
 The Sounders average roughly 42,000 fans. I think they opened all of CenturyLink for the final which can hold 72,000 but generally they only hit that for Seahawks playoff games. Roughly it seems like you get 1.5x more attendance for a final (just looking at Atlanta last year) which should put us at a fairly large surplus ahead of Sunday's game even though they supposedly sold 69K+ tickets. I have tickets already but hoping to use the above script to find some affordable tickets for some friends. Should be a great game, go Sounders!
 
-```
+```csv
 Time,LowestPrice,NumTickets,NumLowestTickets
 Fri Nov 8 09:30:02 PST 2019,203.5,1712,70
 Fri Nov 8 09:45:02 PST 2019,203.5,1702,63
