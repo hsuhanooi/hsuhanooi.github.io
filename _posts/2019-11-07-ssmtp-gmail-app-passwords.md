@@ -26,7 +26,7 @@ OUTPUT=`cat /root/lowest_sounders.csv`
   echo
   echo $OUT_JSON | jq .
   echo
-} | /usr/sbin/ssmtp dracarystorrentian@gmail.com
+} | /usr/sbin/ssmtp MYEMAIL@gmail.com
 ```
 
 **ssmtp working with gmail**
