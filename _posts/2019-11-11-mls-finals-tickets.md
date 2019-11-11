@@ -1,209 +1,289 @@
 ---
 layout: post
-title: Scalpers are smarter than I am
+title: 2019 MLS Cup Final Ticket Prices Data
 excerpt: I proclaimed ticket prices would go down within 48 hours of kick-off. I was wrong.
 tags: sounders,seatgeek,cron,ssmtp,curl,bash,scripting,tickets,prices
 ---
 
 **MLS Cup Final Ticket Prices**
 
-Yesterday I went to the MLS Cup final and watched the Seattle Sounders beat Toronto FC 3-1 to win the MLS Cup at home, here in Seattle. It was an exciting game and Seattle played great but my prediction around tickets for the game were completely wrong. In my last post I set up a quick script to email and record ticket prices and quantity from seatgeek every 15 mins. 3 days before the final I predicted there'd be an excess of inventory which would drop prices significantly before the game. The very next day I was right, ticket prices had dropped to their lowest 
+Yesterday (Sunday Nov 10th) I went to the MLS Cup final and watched the Seattle Sounders beat Toronto FC 3-1 to win the MLS Cup at home, here in Seattle. It was an exciting game and Seattle played great but my prediction around ticket prices before the game were completely wrong. In my last post I set up a quick script to email and record ticket prices and quantity from seatgeek every 15 mins. 3 days before the final (Thursday) I predicted there'd be an excess of inventory which would drop prices significantly before the game. The very next day (Friday), I was right. Ticket prices dropped to $163 per ticket on Friday from 6:45pm till 8:30pm with about 100 or so tickets being on sale. Unfortunately this was the last time tickets would drop that low. I graphed the lowest ticket prices by time below along with the number of tickets available at that price.
 
-<img src="/public/images/NumTickets.png" alt="Number of tickets per day" width="700px">
+<img src="/public/images/LowestPrice.png" alt="Lowest Price per day" width="600px">
 
-<img src="/public/images/LowestPrice.png" alt="Lowest Price per day" width="700px">
+Then I graphed the total number of tickets available to look at supply. 
 
+<img src="/public/images/NumTickets.png" alt="Number of tickets per day" width="600px">
 
+On the day of the game, starting around 12:01am you can see ticket prices spiked up to $250 and hit almost $400 right before game time. This is where I thought scalpers would get nervous and start to firesale tickets but they must have been confident that people were waiting until the last minute to buy and that demand would outstrip supply. They were right, and as the number of tickets dwindled they continued to sell at almost 4x the original price. Now I didn't control here for what the seats were actually like and maybe those $400 cheapest tickets were club seats or better than nosebleeds but for people who just wanted to get in to see the game and feel the atmosphere I don't think that matters that much.
 
-**ssmtp working with gmail**
+I ended up getting tickets through my friend who's a season ticket holder but was unable to help my friends get their own tickets to the game :(. I did alert them of the price movement to $163 but thought it would keep dropping so I ended up giving some bad advice. Usually for normal non-playoff Sounders home games I can get less than season-ticket holder prices on last minute tickets but looks like the MLS Cup Final doesn't have the same type of demand. It was interesting to see how supply and demand bounced leading up to game day though and maybe someone can use this data somehow. It's not a ton of data points but I included them below if anyone wants to use it.
 
-I always jump through multiple authentication login issues when sending through gmail with UNIX tools so hopefully writing this down will make it so I don't have to remember the same issues each time.
+Also if you want to parse the datetime in python I included the datetime strptime string I used to parse it since that's never fun.
 
-First to setup ssmtp.
+```python3
+parsed = datetime.datetime.strptime(dtime, '%a %b %d %H:%M:%S PST %Y')
 ```
-sudo apt-get update
-sudo apt-get install ssmtp
-sudo vi /etc/ssmtp/ssmtp.conf
-```
-
-Then to set up the config file.
-```/etc/ssmtp/ssmtp.conf
-root=MYEMAIL@gmail.com
-mailhub=smtp.gmail.com:465
-FromLineOverride=YES
-AuthUser=MYEMAIL@gmail.com
-AuthPass=MYPASSWORD
-UseTLS=YES
-```
-
-Now to test.
-```
-echo "Testing...1...2...3" | ssmtp MYEMAIL@gmail.com
-```
-
-Then you inevitably get the below.
-
-```
-ssmtp: Authorization failed (535 5.7.8  https://support.google.com/mail/?p=BadCredentials q1sm2306501qti.46 - gsmtp)
-```
-
-Then you google it and you find this Google Support article. https://support.google.com/mail/thread/5621336?hl=en. Then you enable “Access for less secure apps” per the first recommended answer in the Google Support article. And you once again get the above error. 
-
-This is where it starts to get pretty frustrating but I finally found the actual solution. You have to enable "App Passwords" in gmail and assign a unique password per email client. I couldn't use my "main" password for the email account, it had to use an App Specific Password to work. Before you can have App Passwords though you have to enable 2FA. So in gmail, click "Manage your Google Account" -> "Security" -> "Enable 2-step verification". Then go through the flow and the first time I did this it forced me to use Google Prompt (don't worry you can switch to regular 2FA after enabling Google Prompt and then disable Google Prompt and delete your phone). Then go back to the "Security" page and now you'll see the "App Passwords" section. Then go through the flow and add a unique password per app. Hit the test again.
-
-```
-echo "Testing...1...2...3" | ssmtp MYEMAIL@gmail.com
-```
-
-Success.
-
-
-**UPDATE**
-
-I realized the API I was using wasn't accurate! Looks like the API is using Elasticsearch under the hood. The stats column is cached! Argh. There's no listings route so now I'm forced to go down the scraping route. Luckily they don't mask the request and response very well. They do use abbreviations for the response fields though but I've mapped it below for the ones you're probably interested in.
-
-```bash
-curl "https://seatgeek.com/rescraper/v2/listings?_include_seats=1&aid=225&client_id=MTY2MnwxMzgzMzIwMTU4&id=5080866&sixpack_client_id=dec7312f-10a0-4101-a5fc-d49afe679a2f" | jq .listings[0]
-```
-```
-{
-  "dm": "electronic",
-  "d": "Enjoy the match from behind the South goal, where fans tend to watch while standing.",
-  "dq": {
-    "b": 0,
-    "dq": 98.83,
-    "ddq": "9.9",
-    "ev": 666.66,
-    "estimatedValue": 666.66
-  },
-  "dqm": {
-    "1": {
-      "b": 0,
-      "dq": 97.46000000000001,
-      "ddq": "9.7",
-      "ev": 582.13,
-      "estimatedValue": 582.13
-    },
-    "3": {
-      "b": 0,
-      "dq": 97.81,
-      "ddq": "9.8",
-      "ev": 610.58,
-      "estimatedValue": 610.58
-    }
-  },
-  "ep": true,
-  "et": 1,
-  "f": 27.5,
-  "fi": "f8400ae8-bb9f-40bd-9262-40bf887ba3a7",
-  "gk": "116_ll_11:13",
-  "gr": 303008,
-  "id": "l_3KEmAwlCdlBde5hyp1ymqf1Lygk3tb4NBwGsp2qdmDHkgEWmghgkxwl4iJFg2FRl",
-  "ihd": "",
-  "dl": 1,
-  "h": 0,
-  "lv": 0,
-  "vp": 0,
-  "mk": "s:116 r:ll",
-  "m": "open",
-  "pu": 0,
-  "p": 275, # Price
-  "pf": 302.5, # Price with fees
-  "q": 3, # Quantity of tickets
-  "r": "ll", # Row
-  "rf": "Row LL",
-  "rr": "LL",
-  "ss": [
-    "11",
-    "12",
-    "13"
-  ],
-  "sgp": 275,
-  "sgf": 27.5,
-  "sif": false,
-  "s": "116",
-  "sf": "Section 116",
-  "sr": "116",
-  "sh": 0,
-  "sco": false,
-  "sp": [
-    1,
-    3
-  ],
-  "spt": "",
-  "st": "pdf",
-  "wc": 0,
-  "sro": 0,
-  "w": 275
-}
-```
-
-Had to do some slightly more complicated shuffling so decided to replace curl piece with this below python script. Still returns json so I can use jq but handles some of the filtering and sorting more elegantly. I know you could do that in bash but this seemed easier for me.
-
-```python
-import datetime
-import requests
-import json
-
-res = requests.get('https://seatgeek.com/rescraper/v2/listings?_include_seats=1&aid=225&client_id=MTY2MnwxMzgzMzIwMTU4&id=5080866&sixpack_client_id=dec7312f-10a0-4101-a5fc-d49afe679a2f')
-js = res.json()
-listings = js['listings']
-num_tickets = sum(map(lambda x: x['q'], listings))
-sorted_price = sorted(listings, key=lambda x: x['pf'])
-cheapest_price = sorted_price[0]['pf']
-cheapest = []
-for listing in listings:
-    if listing['pf'] == cheapest_price:
-        price = listing['p']
-        price_with_fee = listing['pf']
-        quantity = listing['q']
-        row = listing['r']
-        section = listing['s']
-        seats = listing['gk'].split('_')[2]
-
-        cheap = { 'price': price, 'price_with_fee': price_with_fee, 'quantity': quantity, 'row': row, 'section': section, 'seats': seats, 'time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-        cheapest.append(cheap)
-
-num_cheapest_tickets = sum(map(lambda x: x['quantity'], cheapest))
-print(json.dumps({'cheapest_price': cheapest_price, 'num_cheapest_tickets': num_cheapest_tickets, 'num_tickets': num_tickets, 'listings': cheapest}))
-```
-
-
-I let this run during work and got some interesting interesting data. Columns are time, lowest price, total number of tickets, number of tickets at lowest price. First thing I noticed is there seems to be some price floor at $203.50 which seems like it's set by scalpers. That are about 100 people all seem to be all pricing their tickets exactly the same. More likely is scalpers are buying anything lower than $203.50 and reselling at $203.50 to make a synthetic floor. 2nd is it seems like most individual sellers are posting a single ticket. I wonder if those single tickets get bought by scalpers because they own other tickets near the single tickets. Also it seems like most people post tickets to sell in the morning and purchase tickets after work near the afternoon, at least thats what the below data seems to show. Lastly, my hypothesis is that scalpers overbought and overpriced the tickets and they will get a lot cheaper come Saturday night when they start getting close to game time. 
-
-The Sounders average roughly 42,000 fans. I think they opened all of CenturyLink for the final which can hold 72,000 but generally they only hit that for Seahawks playoff games. Roughly it seems like you get 1.5x more attendance for a final (just looking at Atlanta last year) which should put us at a fairly large surplus ahead of Sunday's game even though they supposedly sold 69K+ tickets. I have tickets already but hoping to use the above script to find some affordable tickets for some friends. Should be a great game, go Sounders!
 
 ```csv
-Time,LowestPrice,NumTickets,NumLowestTickets
-Fri Nov 8 09:30:02 PST 2019,203.5,1712,70
-Fri Nov 8 09:45:02 PST 2019,203.5,1702,63
-Fri Nov 8 10:00:02 PST 2019,203.5,1694,85
-Fri Nov 8 10:15:01 PST 2019,203.5,1777,127
-Fri Nov 8 10:30:02 PST 2019,203.5,1747,115
-Fri Nov 8 10:45:01 PST 2019,203.5,1748,122
-Fri Nov 8 11:00:02 PST 2019,198,1740,1
-Fri Nov 8 11:15:04 PST 2019,171.6,1726,1
-Fri Nov 8 11:30:02 PST 2019,203.5,1702,109
-Fri Nov 8 11:45:01 PST 2019,203.5,1705,120
-Fri Nov 8 12:00:02 PST 2019,198,1687,1
-Fri Nov 8 12:15:02 PST 2019,198,1666,1
-Fri Nov 8 12:30:01 PST 2019,198,1632,1
-Fri Nov 8 12:45:02 PST 2019,203.5,1622,85
-Fri Nov 8 13:00:10 PST 2019,203.5,1598,75
-Fri Nov 8 13:15:02 PST 2019,203.5,1578,65
-Fri Nov 8 13:30:02 PST 2019,203.5,1577,68
-Fri Nov 8 13:45:02 PST 2019,203.5,1569,52
-Fri Nov 8 14:00:04 PST 2019,203.5,1563,64
-Fri Nov 8 14:15:02 PST 2019,203.5,1536,83
-Fri Nov 8 14:30:02 PST 2019,203.5,1531,82
-Fri Nov 8 14:45:03 PST 2019,184.8,1482,1
-Fri Nov 8 15:00:05 PST 2019,203.5,1483,59
-Fri Nov 8 15:15:02 PST 2019,203.5,1450,52
-Fri Nov 8 15:30:01 PST 2019,203.5,1442,49
-Fri Nov 8 15:45:02 PST 2019,203.5,1424,43
-Fri Nov 8 16:00:02 PST 2019,203.5,1406,31
-Fri Nov 8 16:15:02 PST 2019,203.5,1397,31
-Fri Nov 8 16:30:02 PST 2019,203.5,1397,29
-Fri Nov 8 16:45:01 PST 2019,203.5,1386,20
-Fri Nov 8 17:00:02 PST 2019,203.5,1429,27
+Time,LowestPrice,NumTickets,NumTicketsAtLowest
+Thu Nov  7 20:30:02 PST 2019,203.5,1758,61
+Thu Nov  7 20:45:02 PST 2019,191.4,1725,2
+Thu Nov  7 21:00:02 PST 2019,203.5,1718,46
+Thu Nov  7 21:15:02 PST 2019,203.5,1697,37
+Thu Nov  7 21:30:05 PST 2019,203.5,1811,71
+Thu Nov  7 21:45:02 PST 2019,203.5,1820,79
+Thu Nov  7 22:00:02 PST 2019,203.5,1813,75
+Thu Nov  7 22:15:05 PST 2019,203.5,1809,71
+Thu Nov  7 22:30:02 PST 2019,203.5,1796,78
+Thu Nov  7 22:45:02 PST 2019,203.5,1786,72
+Thu Nov  7 23:00:02 PST 2019,203.5,1773,67
+Thu Nov  7 23:15:05 PST 2019,203.5,1756,54
+Thu Nov  7 23:30:04 PST 2019,203.5,1774,66
+Thu Nov  7 23:45:05 PST 2019,203.5,1766,61
+Fri Nov  8 00:00:05 PST 2019,203.5,1764,61
+Fri Nov  8 00:15:06 PST 2019,203.5,1755,54
+Fri Nov  8 00:30:02 PST 2019,203.5,1756,59
+Fri Nov  8 00:45:05 PST 2019,203.5,1758,56
+Fri Nov  8 01:00:02 PST 2019,203.5,1764,61
+Fri Nov  8 01:15:04 PST 2019,203.5,1765,62
+Fri Nov  8 01:30:02 PST 2019,203.5,1761,58
+Fri Nov  8 01:45:05 PST 2019,203.5,1760,57
+Fri Nov  8 02:00:05 PST 2019,203.5,1761,60
+Fri Nov  8 02:15:05 PST 2019,203.5,1763,60
+Fri Nov  8 02:30:05 PST 2019,203.5,1765,61
+Fri Nov  8 02:45:05 PST 2019,203.5,1765,61
+Fri Nov  8 03:00:05 PST 2019,203.5,1764,60
+Fri Nov  8 03:15:02 PST 2019,203.5,1765,61
+Fri Nov  8 03:30:04 PST 2019,203.5,1766,62
+Fri Nov  8 03:45:04 PST 2019,203.5,1760,60
+Fri Nov  8 04:00:02 PST 2019,203.5,1762,60
+Fri Nov  8 04:15:01 PST 2019,203.5,1761,60
+Fri Nov  8 04:30:02 PST 2019,203.5,1756,54
+Fri Nov  8 04:45:06 PST 2019,203.5,1756,56
+Fri Nov  8 05:00:02 PST 2019,203.5,1753,53
+Fri Nov  8 05:15:01 PST 2019,203.5,1747,53
+Fri Nov  8 05:30:02 PST 2019,203.5,1755,57
+Fri Nov  8 05:45:04 PST 2019,203.5,1738,47
+Fri Nov  8 06:00:02 PST 2019,203.5,1748,57
+Fri Nov  8 06:15:02 PST 2019,203.5,1739,50
+Fri Nov  8 06:30:02 PST 2019,203.5,1717,47
+Fri Nov  8 06:45:01 PST 2019,203.5,1714,44
+Fri Nov  8 07:00:02 PST 2019,203.5,1697,33
+Fri Nov  8 07:15:02 PST 2019,203.5,1695,34
+Fri Nov  8 07:30:02 PST 2019,203.5,1694,38
+Fri Nov  8 07:45:05 PST 2019,203.5,1685,40
+Fri Nov  8 08:00:02 PST 2019,203.5,1676,29
+Fri Nov  8 08:15:01 PST 2019,203.5,1681,35
+Fri Nov  8 08:30:02 PST 2019,203.5,1655,25
+Fri Nov  8 08:45:01 PST 2019,203.5,1942,147
+Fri Nov  8 09:00:02 PST 2019,198,1769,1
+Fri Nov  8 09:15:01 PST 2019,203.5,1745,61
+Fri Nov  8 09:30:02 PST 2019,203.5,1712,70
+Fri Nov  8 09:45:02 PST 2019,203.5,1702,63
+Fri Nov  8 10:00:02 PST 2019,203.5,1694,85
+Fri Nov  8 10:15:01 PST 2019,203.5,1777,127
+Fri Nov  8 10:30:02 PST 2019,203.5,1747,115
+Fri Nov  8 10:45:01 PST 2019,203.5,1748,122
+Fri Nov  8 11:00:02 PST 2019,198,1740,1
+Fri Nov  8 11:15:04 PST 2019,171.6,1726,1
+Fri Nov  8 11:30:02 PST 2019,203.5,1702,109
+Fri Nov  8 11:45:01 PST 2019,203.5,1705,120
+Fri Nov  8 12:00:02 PST 2019,198,1687,1
+Fri Nov  8 12:15:02 PST 2019,198,1666,1
+Fri Nov  8 12:30:01 PST 2019,198,1632,1
+Fri Nov  8 12:45:02 PST 2019,203.5,1622,85
+Fri Nov  8 13:00:10 PST 2019,203.5,1598,75
+Fri Nov  8 13:15:02 PST 2019,203.5,1578,65
+Fri Nov  8 13:30:02 PST 2019,203.5,1577,68
+Fri Nov  8 13:45:02 PST 2019,203.5,1569,52
+Fri Nov  8 14:00:04 PST 2019,203.5,1563,64
+Fri Nov  8 14:15:02 PST 2019,203.5,1536,83
+Fri Nov  8 14:30:02 PST 2019,203.5,1531,82
+Fri Nov  8 14:45:03 PST 2019,184.8,1482,1
+Fri Nov  8 15:00:05 PST 2019,203.5,1483,59
+Fri Nov  8 15:15:02 PST 2019,203.5,1450,52
+Fri Nov  8 15:30:01 PST 2019,203.5,1442,49
+Fri Nov  8 15:45:02 PST 2019,203.5,1424,43
+Fri Nov  8 16:00:02 PST 2019,203.5,1406,31
+Fri Nov  8 16:15:02 PST 2019,203.5,1397,31
+Fri Nov  8 16:30:02 PST 2019,203.5,1397,29
+Fri Nov  8 16:45:01 PST 2019,203.5,1386,20
+Fri Nov  8 17:00:02 PST 2019,203.5,1429,27
+Fri Nov  8 17:15:04 PST 2019,184.8,1606,1
+Fri Nov  8 17:30:02 PST 2019,202.4,1581,1
+Fri Nov  8 17:45:01 PST 2019,189.22,1554,1
+Fri Nov  8 18:00:02 PST 2019,193.6,1550,2
+Fri Nov  8 18:15:02 PST 2019,189.22,1536,1
+Fri Nov  8 18:30:01 PST 2019,189.22,1508,1
+Fri Nov  8 18:45:02 PST 2019,162.8,1505,82
+Fri Nov  8 19:00:02 PST 2019,162.8,1441,30
+Fri Nov  8 19:15:05 PST 2019,162.8,1430,29
+Fri Nov  8 19:30:02 PST 2019,158.4,1403,2
+Fri Nov  8 19:45:02 PST 2019,158.4,1395,2
+Fri Nov  8 20:00:02 PST 2019,158.4,1372,2
+Fri Nov  8 20:15:01 PST 2019,162.8,1363,10
+Fri Nov  8 20:30:02 PST 2019,162.8,1341,5
+Fri Nov  8 20:45:02 PST 2019,203.5,1335,3
+Fri Nov  8 21:00:04 PST 2019,203.5,1348,14
+Fri Nov  8 21:15:02 PST 2019,203.5,1342,11
+Fri Nov  8 21:30:04 PST 2019,203.5,1334,7
+Fri Nov  8 21:45:02 PST 2019,203.5,1331,11
+Fri Nov  8 22:00:04 PST 2019,203.5,1331,7
+Fri Nov  8 22:15:02 PST 2019,203.5,1331,9
+Fri Nov  8 22:30:03 PST 2019,203.5,1327,7
+Fri Nov  8 22:45:02 PST 2019,203.5,1322,4
+Fri Nov  8 23:00:06 PST 2019,203.5,1316,4
+Fri Nov  8 23:15:02 PST 2019,203.5,1318,3
+Fri Nov  8 23:30:02 PST 2019,203.5,1316,5
+Fri Nov  8 23:45:04 PST 2019,203.5,1315,3
+Sat Nov  9 00:00:02 PST 2019,203.5,1312,5
+Sat Nov  9 00:15:04 PST 2019,203.5,1303,3
+Sat Nov  9 00:30:05 PST 2019,203.5,1300,2
+Sat Nov  9 00:45:05 PST 2019,203.5,1302,5
+Sat Nov  9 01:00:05 PST 2019,203.5,1297,4
+Sat Nov  9 01:15:02 PST 2019,203.5,1297,4
+Sat Nov  9 01:30:04 PST 2019,203.5,1295,2
+Sat Nov  9 01:45:04 PST 2019,203.5,1293,5
+Sat Nov  9 02:00:02 PST 2019,203.5,1293,5
+Sat Nov  9 02:15:05 PST 2019,203.5,1295,5
+Sat Nov  9 02:30:05 PST 2019,203.5,1294,5
+Sat Nov  9 02:45:04 PST 2019,203.5,1291,4
+Sat Nov  9 03:00:05 PST 2019,203.5,1292,5
+Sat Nov  9 03:15:05 PST 2019,203.5,1292,5
+Sat Nov  9 03:30:04 PST 2019,203.5,1290,5
+Sat Nov  9 03:45:04 PST 2019,203.5,1290,5
+Sat Nov  9 04:00:01 PST 2019,203.5,1290,5
+Sat Nov  9 04:15:02 PST 2019,203.5,1286,3
+Sat Nov  9 04:30:02 PST 2019,203.5,1288,3
+Sat Nov  9 04:45:02 PST 2019,203.5,1280,1
+Sat Nov  9 05:00:02 PST 2019,203.5,1280,3
+Sat Nov  9 05:15:02 PST 2019,203.5,1280,3
+Sat Nov  9 05:30:02 PST 2019,203.5,1281,3
+Sat Nov  9 05:45:02 PST 2019,203.5,1281,3
+Sat Nov  9 06:00:01 PST 2019,203.5,1280,3
+Sat Nov  9 06:15:02 PST 2019,203.5,1281,3
+Sat Nov  9 06:30:02 PST 2019,203.5,1282,3
+Sat Nov  9 06:45:03 PST 2019,203.5,1278,3
+Sat Nov  9 07:00:02 PST 2019,203.5,1275,1
+Sat Nov  9 07:15:02 PST 2019,203.5,1273,3
+Sat Nov  9 07:30:02 PST 2019,203.5,1262,1
+Sat Nov  9 07:45:01 PST 2019,229.68,1251,1
+Sat Nov  9 08:00:02 PST 2019,203.5,1246,1
+Sat Nov  9 08:15:04 PST 2019,203.5,1242,3
+Sat Nov  9 08:30:02 PST 2019,203.5,1228,1
+Sat Nov  9 08:45:02 PST 2019,203.5,1206,1
+Sat Nov  9 09:00:01 PST 2019,229.68,1212,1
+Sat Nov  9 09:15:02 PST 2019,198,1205,1
+Sat Nov  9 09:30:02 PST 2019,198,1186,1
+Sat Nov  9 09:45:02 PST 2019,198,1179,1
+Sat Nov  9 10:00:02 PST 2019,203.5,1165,1
+Sat Nov  9 10:15:01 PST 2019,231,1146,2
+Sat Nov  9 10:30:02 PST 2019,231,1139,2
+Sat Nov  9 10:45:02 PST 2019,203.5,1130,1
+Sat Nov  9 11:00:05 PST 2019,224.4,1119,1
+Sat Nov  9 11:15:02 PST 2019,224.4,1105,1
+Sat Nov  9 11:30:04 PST 2019,231,1090,2
+Sat Nov  9 11:45:02 PST 2019,203.5,1079,1
+Sat Nov  9 12:00:01 PST 2019,229.68,1067,2
+Sat Nov  9 12:15:01 PST 2019,229.68,1060,2
+Sat Nov  9 12:30:02 PST 2019,203.5,1038,1
+Sat Nov  9 12:45:02 PST 2019,203.5,1033,1
+Sat Nov  9 13:00:02 PST 2019,203.5,1022,1
+Sat Nov  9 13:15:02 PST 2019,215.16,1006,1
+Sat Nov  9 13:30:04 PST 2019,215.16,1010,1
+Sat Nov  9 13:45:02 PST 2019,203.5,1004,1
+Sat Nov  9 14:00:02 PST 2019,203.5,995,1
+Sat Nov  9 14:15:03 PST 2019,215.16,985,1
+Sat Nov  9 14:30:01 PST 2019,229.68,981,2
+Sat Nov  9 14:45:02 PST 2019,229.68,966,2
+Sat Nov  9 15:00:02 PST 2019,229.68,957,2
+Sat Nov  9 15:15:02 PST 2019,229.68,950,2
+Sat Nov  9 15:30:04 PST 2019,229.68,940,2
+Sat Nov  9 15:45:01 PST 2019,229.68,935,2
+Sat Nov  9 16:00:02 PST 2019,250.8,927,3
+Sat Nov  9 16:15:04 PST 2019,250.8,912,3
+Sat Nov  9 16:30:02 PST 2019,250.8,901,3
+Sat Nov  9 16:45:01 PST 2019,250.8,890,1
+Sat Nov  9 17:00:02 PST 2019,250.8,877,1
+Sat Nov  9 17:15:02 PST 2019,250.8,874,1
+Sat Nov  9 17:30:02 PST 2019,250.8,857,1
+Sat Nov  9 17:45:02 PST 2019,231,845,1
+Sat Nov  9 18:00:02 PST 2019,231,837,1
+Sat Nov  9 18:15:02 PST 2019,212.52,832,1
+Sat Nov  9 18:30:02 PST 2019,212.52,825,1
+Sat Nov  9 18:45:02 PST 2019,212.52,808,1
+Sat Nov  9 19:00:02 PST 2019,211.22,791,1
+Sat Nov  9 19:15:02 PST 2019,212.52,779,1
+Sat Nov  9 19:30:02 PST 2019,212.52,763,1
+Sat Nov  9 19:45:01 PST 2019,224.4,751,1
+Sat Nov  9 20:00:01 PST 2019,224.4,741,1
+Sat Nov  9 20:15:02 PST 2019,233.61,735,1
+Sat Nov  9 20:30:01 PST 2019,237.6,713,2
+Sat Nov  9 20:45:02 PST 2019,237.6,701,1
+Sat Nov  9 21:00:05 PST 2019,237.6,702,2
+Sat Nov  9 21:15:02 PST 2019,196.68,698,1
+Sat Nov  9 21:30:02 PST 2019,242.88,693,1
+Sat Nov  9 21:45:01 PST 2019,237.6,681,3
+Sat Nov  9 22:00:02 PST 2019,262.68,665,1
+Sat Nov  9 22:15:01 PST 2019,262.68,659,1
+Sat Nov  9 22:30:04 PST 2019,262.68,649,1
+Sat Nov  9 22:45:01 PST 2019,262.68,642,1
+Sat Nov  9 23:00:02 PST 2019,262.68,633,1
+Sat Nov  9 23:15:02 PST 2019,246.84,623,1
+Sat Nov  9 23:30:01 PST 2019,257.4,608,1
+Sat Nov  9 23:45:02 PST 2019,250.8,601,1
+Sun Nov 10 00:00:02 PST 2019,250.8,601,1
+Sun Nov 10 00:15:02 PST 2019,250.8,591,1
+Sun Nov 10 00:30:02 PST 2019,250.8,590,1
+Sun Nov 10 00:45:02 PST 2019,250.8,584,1
+Sun Nov 10 01:00:04 PST 2019,250.8,581,1
+Sun Nov 10 01:15:01 PST 2019,250.8,585,1
+Sun Nov 10 01:30:04 PST 2019,257.4,577,1
+Sun Nov 10 01:45:04 PST 2019,257.4,578,1
+Sun Nov 10 02:00:03 PST 2019,257.4,582,1
+Sun Nov 10 02:15:01 PST 2019,257.4,582,1
+Sun Nov 10 02:30:04 PST 2019,257.4,582,1
+Sun Nov 10 02:45:02 PST 2019,257.4,584,1
+Sun Nov 10 03:00:02 PST 2019,257.4,583,1
+Sun Nov 10 03:15:02 PST 2019,257.4,581,1
+Sun Nov 10 03:30:04 PST 2019,257.4,579,1
+Sun Nov 10 03:45:03 PST 2019,257.4,579,1
+Sun Nov 10 04:00:02 PST 2019,257.4,581,1
+Sun Nov 10 04:15:01 PST 2019,257.4,579,1
+Sun Nov 10 04:30:02 PST 2019,257.4,579,1
+Sun Nov 10 04:45:04 PST 2019,257.4,579,1
+Sun Nov 10 05:00:02 PST 2019,257.4,579,1
+Sun Nov 10 05:15:02 PST 2019,257.4,579,1
+Sun Nov 10 05:30:02 PST 2019,257.4,576,1
+Sun Nov 10 05:45:02 PST 2019,257.4,574,1
+Sun Nov 10 06:00:02 PST 2019,257.4,572,1
+Sun Nov 10 06:15:02 PST 2019,257.4,576,1
+Sun Nov 10 06:30:01 PST 2019,257.4,563,1
+Sun Nov 10 06:45:02 PST 2019,257.4,557,1
+Sun Nov 10 07:00:02 PST 2019,257.4,555,1
+Sun Nov 10 07:15:02 PST 2019,257.4,538,1
+Sun Nov 10 07:30:02 PST 2019,231,531,2
+Sun Nov 10 07:45:02 PST 2019,252.12,505,1
+Sun Nov 10 08:00:02 PST 2019,252.12,482,1
+Sun Nov 10 08:15:02 PST 2019,262.68,449,2
+Sun Nov 10 08:30:02 PST 2019,229.68,422,1
+Sun Nov 10 08:45:02 PST 2019,264,386,1
+Sun Nov 10 09:00:02 PST 2019,264,358,1
+Sun Nov 10 09:15:02 PST 2019,231,341,1
+Sun Nov 10 09:30:02 PST 2019,274.56,313,1
+Sun Nov 10 09:45:02 PST 2019,297,294,3
+Sun Nov 10 10:00:02 PST 2019,323.43,269,1
+Sun Nov 10 10:15:01 PST 2019,323.43,220,1
+Sun Nov 10 10:30:03 PST 2019,264,211,4
+Sun Nov 10 10:45:02 PST 2019,203.5,167,2
+Sun Nov 10 11:00:01 PST 2019,237.6,142,2
+Sun Nov 10 11:15:01 PST 2019,302.5,115,2
+Sun Nov 10 11:30:02 PST 2019,396,68,3
+Sun Nov 10 11:45:01 PST 2019,330,54,1
+Sun Nov 10 12:00:02 PST 2019,328.68,37,1
+Sun Nov 10 12:15:02 PST 2019,505.56,24,1
+Sun Nov 10 12:30:03 PST 2019,505.56,20,1
+Sun Nov 10 12:45:02 PST 2019,278.52,23,1
+Sun Nov 10 13:00:02 PST 2019,231,44,10
 ```
